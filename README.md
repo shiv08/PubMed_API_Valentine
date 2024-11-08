@@ -4,7 +4,7 @@ A modern web application built with FastAPI that provides an intuitive interface
 
 ## 📱 Interface Preview
 
-![PubMed Search Interface](screenshot.png)
+![PubMed Search Interface](pubMed_ss.png)
 
 Our intuitive web interface features:
 - 🎯 Clean, minimalist search form
