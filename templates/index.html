@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Search PubMed Articles</h5>
+                <form method="POST" action="/search" class="mt-3">
+                    <div class="mb-3">
+                        <label class="form-label">Search Type</label>
+                        <select name="search_type" class="form-select" id="searchType" onchange="toggleDateInputs()">
+                            <option value="title">Search by Title</option>
+                            <option value="abstract">Search by Abstract</option>
+                            <option value="date">Search by Date</option>
+                        </select>
+                    </div>
+
+                    <div id="keywordsInput" class="mb-3">
+                        <label class="form-label">Keywords</label>
+                        <input type="text" name="keywords" class="form-control" value="{{ keywords or '' }}">
+                    </div>
+
+                    <div id="dateInputs" class="mb-3 d-none">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" name="start_date" class="form-control" value="{{ start_date or '' }}">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">End Date</label>
+                                <input type="date" name="end_date" class="form-control" value="{{ end_date or '' }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Max Results</label>
+                        <input type="number" name="max_results" class="form-control" value="10" min="1" max="100">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger mt-4" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="mt-4">
+            <h5>Found {{ total_results }} results</h5>
+            {% for article in results %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">PMID: {{ article.pmid }}</h6>
+                    <p class="card-text">
+                        <strong>Authors:</strong> {{ article.authors|join(", ") }}<br>
+                        <strong>Published:</strong> {{ article.publication_date }}
+                    </p>
+                    {% if article.abstract %}
+                    <p class="card-text">{{ article.abstract }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleDateInputs() {
+    const searchType = document.getElementById('searchType').value;
+    const keywordsInput = document.getElementById('keywordsInput');
+    const dateInputs = document.getElementById('dateInputs');
+
+    if (searchType === 'date') {
+        keywordsInput.classList.add('d-none');
+        dateInputs.classList.remove('d-none');
+    } else {
+        keywordsInput.classList.remove('d-none');
+        dateInputs.classList.add('d-none');
+    }
+}
+</script>
+{% endblock %}
