@@ -2,7 +2,22 @@
 
 A modern web application built with FastAPI that provides an intuitive interface to search PubMed articles. The application includes both a user-friendly web interface and REST API endpoints for programmatic access.
 
-## ✨ Features
+## 📱 Interface Preview
+
+![PubMed Search Interface](screenshot.png)
+
+Our intuitive web interface features:
+- 🎯 Clean, minimalist search form
+- 📝 Multiple search types (Title/Abstract/Date)
+- 🔢 Configurable results limit
+- 📊 Comprehensive result display including:
+  - Article titles and authors
+  - Publication dates
+  - PubMed IDs (PMID)
+  - Full abstracts (when available)
+- 🎨 Bootstrap-based responsive design
+
+## ✨ Key Features
 
 ### Search Capabilities
 - 📚 **Title Search**: Find articles using keywords in titles
@@ -15,19 +30,19 @@ A modern web application built with FastAPI that provides an intuitive interface
 
 ## 🛠️ Technology Stack
 
-- **Backend**: FastAPI
+- **Backend Framework**: FastAPI
 - **Template Engine**: Jinja2
-- **Frontend**: Bootstrap 5
-- **Testing**: pytest
-- **API Documentation**: Swagger/OpenAPI
+- **Frontend Framework**: Bootstrap 5
+- **Testing Framework**: pytest
+- **Documentation**: Swagger/OpenAPI
 
-## 🚀 Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.8 or higher
 - pip (Python package manager)
 
-### Setup Steps
+### Installation Steps
 
 1. **Clone the Repository**
 ```bash
@@ -35,7 +50,7 @@ git clone https://github.com/your-username/pubmed-search-app.git
 cd pubmed-search-app
 ```
 
-2. **Create Virtual Environment**
+2. **Set Up Virtual Environment**
 ```bash
 # Windows
 python -m venv venv
@@ -51,12 +66,12 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. **Run the Application**
+4. **Launch Application**
 ```bash
 uvicorn main:app --reload
 ```
 
-5. **Access the Application**
+5. **Access Application**
 - Web Interface: http://127.0.0.1:8000
 - API Documentation: http://127.0.0.1:8000/docs
 
@@ -84,35 +99,24 @@ pubmed_webapp/
 ```http
 GET /api/search/title?keywords=cancer&max_results=5
 ```
-- **Parameters**:
-  - `keywords`: Search terms
-  - `max_results`: Maximum number of results (default: 10)
 
 ### Abstract Search
 ```http
 GET /api/search/abstract?keywords=covid&max_results=5
 ```
-- **Parameters**:
-  - `keywords`: Search terms
-  - `max_results`: Maximum number of results (default: 10)
 
 ### Date Search
 ```http
 GET /api/search/date?start_date=2024/01/01&end_date=2024/03/01&max_results=5
 ```
-- **Parameters**:
-  - `start_date`: Start date (YYYY/MM/DD)
-  - `end_date`: End date (YYYY/MM/DD)
-  - `max_results`: Maximum number of results (default: 10)
 
 ## 🧪 Testing
 
-Run the test suite:
 ```bash
-# Run all tests
-pytest tests/
+# Install test dependencies
+pip install pytest pytest-asyncio httpx
 
-# Run with verbose output
+# Run all tests
 pytest -v tests/
 
 # Run specific test file
@@ -122,91 +126,64 @@ pytest tests/test_api.py
 ## 📈 Future Enhancements
 
 ### 1. Scalability Improvements
-- [ ] **Caching Layer**
-  - Redis implementation for response caching
-  - Configurable cache timeouts
-  - Distributed caching support
-
-- [ ] **Database Integration**
-  - PostgreSQL for search history
-  - Async database operations
-  - Connection pooling
+- [ ] **Caching System**
+  ```mermaid
+  graph LR
+    Client --> LoadBalancer
+    LoadBalancer --> Server1
+    LoadBalancer --> Server2
+    Server1 --> Redis
+    Server2 --> Redis
+    Redis --> PubMedAPI
+  ```
+  - Redis for response caching
+  - Distributed caching
+  - Cache invalidation strategies
 
 - [ ] **Load Balancing**
-  - Nginx load balancer implementation
+  - Nginx configuration
   - Multiple server instances
-  - Health check endpoints
+  - Health monitoring
 
 - [ ] **Container Orchestration**
-  - Docker containerization
-  - Kubernetes deployment
-  - Auto-scaling configuration
+  ```yaml
+  version: '3.8'
+  services:
+    app:
+      build: .
+      replicas: 3
+    redis:
+      image: redis:alpine
+    nginx:
+      image: nginx:alpine
+  ```
 
 ### 2. Performance Optimizations
 - [ ] **Rate Limiting**
-  - Redis-based rate limiting
-  - Per-user and global limits
-  - Custom rate limit policies
+  - Request throttling
+  - Usage quotas
+  - Fair use policies
 
 - [ ] **Parallel Processing**
-  - Async request handling
-  - Batch processing for large queries
-  - Worker pools for CPU-intensive tasks
+  - Async operations
+  - Batch processing
+  - Worker pools
 
-### 3. Monitoring and Logging
+### 3. Monitoring System
 - [ ] **Metrics Collection**
-  - Prometheus integration
-  - Grafana dashboards
-  - Custom metrics for search patterns
+  - Performance monitoring
+  - Usage statistics
+  - Error tracking
 
-- [ ] **Logging System**
-  - ELK stack integration
-  - Structured logging
-  - Log aggregation
-
-### 4. High Availability
-- [ ] **Service Discovery**
-  - Consul integration
-  - Dynamic service registration
-  - Health monitoring
-
-- [ ] **Failover Mechanisms**
-  - Circuit breakers
-  - Fallback strategies
-  - Replica sets
-
-### 5. Security Enhancements
-- [ ] **Authentication System**
-  - JWT implementation
-  - OAuth2 integration
-  - Role-based access control
-
-### 6. Feature Additions
+### 4. Additional Features
 - [ ] Advanced search filters
-- [ ] Export functionality (PDF, CSV)
-- [ ] User dashboard
-- [ ] Search history tracking
-- [ ] Result sorting options
+- [ ] Export functionality
+- [ ] User authentication
+- [ ] Search history
+- [ ] Result sorting
 
-## 🔒 Security
+## 🚀 Planned Architecture
 
-- Input validation for all search parameters
-- Rate limiting on API endpoints
-- Error handling for invalid requests
-
-## 🐛 Known Issues
-
-- Limited to 100 results per query
-- Date search requires specific format (YYYY/MM/DD)
-
-## 🚀 Deployment Architecture
-
-### Current Architecture
-```
-Client -> FastAPI Server -> PubMed API
-```
-
-### Planned Scalable Architecture
 ```
                                     ┌─── FastAPI Server 1 ───┐
 Client -> Nginx Load Balancer ─────├─── FastAPI Server 2 ───├─── Redis Cache ─── PubMed API
@@ -216,31 +193,33 @@ Client -> Nginx Load Balancer ─────├─── FastAPI Server 2 ─�
                                      PostgreSQL Database
 ```
 
-## 📦 Containerization
+## 🔒 Security Features
+- Input validation
+- Rate limiting
+- Error handling
+- Request sanitization
 
-### Planned Docker Setup
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-  redis:
-    image: redis:alpine
-  postgres:
-    image: postgres:13
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
+## 📝 API Usage Example
+```python
+import requests
+
+# Search by title
+response = requests.get(
+    "http://127.0.0.1:8000/api/search/title",
+    params={
+        "keywords": "cancer treatment",
+        "max_results": 5
+    }
+)
+articles = response.json()
 ```
+
+## 🐛 Known Limitations
+- Maximum 100 results per query
+- Specific date format requirement (YYYY/MM/DD)
+- Rate limits on PubMed API
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Contact
-
-- Developer Name - [Your Email]
-- Project Link: [https://github.com/your-username/pubmed-search-app](https://github.com/your-username/pubmed-search-app)
